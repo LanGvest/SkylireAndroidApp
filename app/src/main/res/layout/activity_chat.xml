@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context=".ChatActivity"
+	android:background="@color/background"
+	android:orientation="vertical">
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1">
+
+		<androidx.appcompat.widget.Toolbar
+			android:elevation="2dp"
+			android:id="@+id/toolbar"
+			android:layout_margin="@dimen/margin_14"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:background="@drawable/toolbar_background"
+			android:minHeight="?attr/actionBarSize"
+			android:theme="?attr/actionBarTheme" />
+
+		<View
+			android:elevation="1dp"
+			android:layout_width="match_parent"
+			android:layout_height="65dp"
+			android:background="@drawable/shadow_chat"/>
+
+
+		<LinearLayout
+			android:id="@+id/loading_container"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:orientation="vertical"
+			android:gravity="center">
+
+			<com.wang.avi.AVLoadingIndicatorView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				app:indicatorName="BallSpinFadeLoaderIndicator"
+				app:indicatorColor="@color/text"
+				/>
+
+		</LinearLayout>
+
+		<LinearLayout
+			android:visibility="gone"
+			android:id="@+id/error_container"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:orientation="vertical"
+			android:gravity="center">
+
+			<TextView
+				android:textColor="@color/text"
+				android:textSize="@dimen/text_size"
+				android:layout_marginStart="@dimen/margin_48"
+				android:layout_marginEnd="@dimen/margin_48"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:gravity="center"
+				android:text="@string/error_internet_connection_message" />
+
+			<TextView
+				android:layout_marginTop="@dimen/margin_48"
+				style="@style/Button"
+				android:id="@+id/retry_button"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/retry" />
+
+		</LinearLayout>
+
+		<ListView
+			android:visibility="gone"
+			android:id="@+id/chat_container"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:divider="@null"
+			android:listSelector="@android:color/transparent"
+			android:stackFromBottom="true"
+			android:transcriptMode="alwaysScroll" />
+	</RelativeLayout>
+
+	<View
+		android:visibility="gone"
+		android:id="@+id/message_input_divider"
+		android:layout_width="match_parent"
+		android:layout_height="1px"
+		android:background="@color/divider" />
+
+	<LinearLayout
+		android:visibility="gone"
+		android:id="@+id/message_input_container"
+		android:layout_width="match_parent"
+		android:layout_height="55dp"
+		android:gravity="center"
+		android:orientation="horizontal"
+		android:background="@color/background_container">
+
+		<EditText
+			android:lines="1"
+			android:textColorHint="@color/hint"
+			android:textSize="@dimen/text_size"
+			android:paddingTop="@dimen/margin_8"
+			android:paddingBottom="@dimen/margin_8"
+			android:paddingStart="@dimen/margin_14"
+			android:paddingEnd="0dp"
+			android:background="@color/transparent"
+			android:textColor="@color/text"
+			android:id="@+id/message_input"
+			android:hint="@string/message"
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			android:inputType="text"
+			android:importantForAutofill="no" />
+
+		<ImageView
+			android:padding="10dp"
+			android:background="?selectableItemBackgroundBorderless"
+			android:src="@drawable/ic_send"
+			android:id="@+id/message_send"
+			android:layout_width="52dp"
+			android:layout_height="50dp"
+			android:contentDescription="@string/send" />
+	</LinearLayout>
+</LinearLayout>

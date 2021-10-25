@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="vertical"
+	android:gravity="center"
+	android:id="@+id/bottom_dialog_container"
+	android:background="@drawable/bottom_dialog_background"
+	android:paddingTop="@dimen/margin_18"
+	android:paddingStart="@dimen/margin_18"
+	android:paddingEnd="@dimen/margin_18">
+
+	<de.hdodenhof.circleimageview.CircleImageView
+		android:id="@+id/bottom_dialog_avatar"
+		android:layout_width="70dp"
+		android:layout_height="70dp"/>
+
+	<LinearLayout
+		android:layout_marginTop="@dimen/margin_14"
+		android:id="@+id/bottom_dialog_username_container"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:gravity="center">
+
+		<ImageView
+			android:visibility="gone"
+			android:background="@color/background_container"
+			android:id="@+id/bottom_dialog_username_icon"
+			android:contentDescription="@string/icon"
+			android:layout_width="26dp"
+			android:layout_height="26dp"
+			android:layout_marginEnd="@dimen/margin_8"
+			android:scaleType="centerCrop"/>
+
+		<TextView
+			android:text="@string/text"
+			android:visibility="gone"
+			android:id="@+id/bottom_dialog_username"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:fontFamily="@font/game_bold"
+			android:textColor="@color/text"
+			android:textSize="@dimen/text_size"/>
+
+		<com.romainpiel.shimmer.ShimmerTextView
+			style="@style/GoldenAdapter"
+			android:textSize="@dimen/text_size"
+			android:visibility="gone"
+			android:id="@+id/bottom_dialog_username_golden"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			app:reflectionColor="@color/gold_highlight"/>
+
+		<com.romainpiel.shimmer.ShimmerTextView
+			style="@style/EpicAdapter"
+			android:textSize="@dimen/text_size"
+			android:visibility="gone"
+			android:id="@+id/bottom_dialog_username_epic"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			app:reflectionColor="@color/epic_highlight"/>
+	</LinearLayout>
+
+	<TextView
+		android:id="@+id/bottom_dialog_email"
+		android:layout_marginTop="@dimen/margin_8"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textSize="@dimen/text_size"
+		android:textColor="@color/text"/>
+
+	<TextView
+		android:id="@+id/bottom_dialog_logout_button"
+		style="@style/Button"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/logout"
+		android:layout_marginTop="@dimen/margin_48"
+		android:layout_marginBottom="@dimen/margin_48"/>
+</LinearLayout>

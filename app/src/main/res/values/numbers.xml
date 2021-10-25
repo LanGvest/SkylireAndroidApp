@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- sp -->
+    <dimen name="text_size_username">15sp</dimen>
+    <dimen name="text_size">18sp</dimen>
+    <dimen name="text_size_button">20sp</dimen>
+    <dimen name="text_size_title">24sp</dimen>
+    <dimen name="text_size_title_big">48sp</dimen>
+    <!-- dp -->
+    <dimen name="margin_8">8dp</dimen>
+    <dimen name="margin_14">14dp</dimen>
+    <dimen name="margin_18">18dp</dimen>
+    <dimen name="margin_24">24dp</dimen>
+    <dimen name="margin_48">48dp</dimen>
+    <dimen name="button_padding_y">10dp</dimen>
+    <dimen name="button_padding_x">26dp</dimen>
+    <dimen name="radius_container">10dp</dimen>
+    <dimen name="radius_popup">20dp</dimen>
+    <dimen name="icon_scale">24dp</dimen>
+    <dimen name="icon_scale_small">12dp</dimen>
+    <dimen name="icon_scale_particle">12dp</dimen>
+</resources>
