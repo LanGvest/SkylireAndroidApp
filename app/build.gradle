@@ -69,21 +69,18 @@ dependencies {
     // Particles
     implementation 'com.plattysoft.leonids:LeonidsLib:1.3.2'
 
-    // Shimmer Effect
+    // Shimmer TextView Effect
     implementation 'com.romainpiel.shimmer:library:1.4.0@aar'
 
-    // Images by URL
+    // ImageView by URL
     implementation 'com.github.bumptech.glide:glide:4.12.0'
 
-    // Round imageView
-    implementation 'com.makeramen:roundedimageview:2.3.0'
-
-    // Tap Target View
+    // TapTargetView
     implementation 'uk.co.samuelwall:material-tap-target-prompt:2.0.1'
 
-    // Circle Image View
+    // Circle ImageView
     implementation 'de.hdodenhof:circleimageview:3.0.0'
 
-    // Loadings
+    // LoadingView
     implementation 'com.wang.avi:library:2.1.3'
 }
