@@ -23,7 +23,7 @@ public class Auth {
 
 	public GoogleSignInClient getGoogleSignInClient(Activity activity) {
 		GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-				.requestIdToken(activity.getString(R.string.web_client_id))
+				.requestIdToken(activity.getString(R.string.firebase_web_client_id))
 				.requestEmail()
 				.build();
 		return GoogleSignIn.getClient(activity, gso);

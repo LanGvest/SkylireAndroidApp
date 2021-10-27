@@ -258,26 +258,7 @@ public class ChatActivity extends AppCompatActivity {
 		});
 	}
 
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		if(messagesChildEventListenerWithLimit != null && isMessagesChildEventListenerWithLimit) {
-			FBD_messagesWithLimit.removeEventListener(messagesChildEventListenerWithLimit);
-			isMessagesChildEventListenerWithLimit = false;
-		}
-		if(mutedValueEventListener != null && isMutedValueEventListener) {
-			FBD_muted.removeEventListener(mutedValueEventListener);
-			isMutedValueEventListener = false;
-		}
-		if(suggestionValueEventListener != null && isSuggestionValueEventListener) {
-			FBD_suggestion.removeEventListener(suggestionValueEventListener);
-			isSuggestionValueEventListener = false;
-		}
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
+	private void startListening() {
 		if(messagesChildEventListenerWithLimit != null && !isMessagesChildEventListenerWithLimit) {
 			FBD_messagesWithLimit.addChildEventListener(messagesChildEventListenerWithLimit);
 			isMessagesChildEventListenerWithLimit = true;
@@ -292,9 +273,7 @@ public class ChatActivity extends AppCompatActivity {
 		}
 	}
 
-	@Override
-	protected void onPause() {
-		super.onPause();
+	private void stopListening() {
 		if(messagesChildEventListenerWithLimit != null && isMessagesChildEventListenerWithLimit) {
 			FBD_messagesWithLimit.removeEventListener(messagesChildEventListenerWithLimit);
 			isMessagesChildEventListenerWithLimit = false;
@@ -307,6 +286,24 @@ public class ChatActivity extends AppCompatActivity {
 			FBD_suggestion.removeEventListener(suggestionValueEventListener);
 			isSuggestionValueEventListener = false;
 		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		stopListening();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		startListening();
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		stopListening();
 	}
 
 	@Override
