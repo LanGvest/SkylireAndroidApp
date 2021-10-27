@@ -1,16 +1,15 @@
 <resources>
-	<string name="default_web_client_id_custom">32641614777-c4davn2pqt2h43p4clrm9clqu6fv2p1q.apps.googleusercontent.com</string>
 	<string name="app_name">Skylire</string>
-	<string name="logo">logo</string>
+	<string name="logo_desc">logo</string>
 	<string name="app_description">Потоковый обмен сообщениями в режиме реального времени</string>
 	<string name="start">Начать</string>
-	<string name="send">send</string>
+	<string name="send_desc">send</string>
 	<string name="message">Сообщение</string>
-	<string name="icon">icon</string>
+	<string name="icon_desc">icon</string>
 	<string name="profile">Профиль</string>
 	<string name="logout">Выйти</string>
-	<string name="text">Text</string>
 	<string name="lock_message">Приложение недоступно.\nВозможно, на сервере ведутся технические работы</string>
 	<string name="error_internet_connection_message">Не удалось подключиться к чату.\nПожалуйста, проверьте своё интернет соединение и повторите попытку</string>
 	<string name="retry">Повторить</string>
+	<string name="welcome_message">добро пожаловать в Skylire Live Chat!</string>
 </resources>

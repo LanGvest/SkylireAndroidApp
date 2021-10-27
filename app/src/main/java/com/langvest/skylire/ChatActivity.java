@@ -22,8 +22,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.MenuItemCompat;
@@ -36,6 +34,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.langvest.skylire.utils.AppMode;
 import com.langvest.skylire.utils.Auth;
@@ -48,8 +47,6 @@ import com.langvest.skylire.utils.Suggestion;
 import com.plattysoft.leonids.ParticleSystem;
 import com.romainpiel.shimmer.ShimmerTextView;
 import java.util.ArrayList;
-import java.util.Random;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 
@@ -69,12 +66,18 @@ public class ChatActivity extends AppCompatActivity {
 	BottomSheetDialog bottomDialog;
 	private FirebaseUser user;
 	private DatabaseReference FBD_messages;
+	private Query FBD_messagesWithLimit;
 	private DatabaseReference FBD_muted;
 	private DatabaseReference FBD_suggestion;
-	private ChildEventListener messagesChildEventListener;
+	private ChildEventListener messagesChildEventListenerWithLimit;
 	private ValueEventListener mutedValueEventListener;
 	private ValueEventListener suggestionValueEventListener;
+	private boolean isMessagesChildEventListenerWithLimit = false;
+	private boolean isMutedValueEventListener = false;
+	private boolean isSuggestionValueEventListener = false;
 	private final ArrayList<String> ignoredKeys = new ArrayList<>();
+	private final int messagesRenderLimit = 100;
+	private long minTimestamp = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +91,7 @@ public class ChatActivity extends AppCompatActivity {
 		user = FirebaseAuth.getInstance().getCurrentUser();
 
 		FBD_messages = FirebaseDatabase.getInstance().getReference().child("messages");
+		FBD_messagesWithLimit = FirebaseDatabase.getInstance().getReference().child("messages").limitToLast(messagesRenderLimit);
 		FBD_muted = FirebaseDatabase.getInstance().getReference().child("muted");
 		FBD_suggestion = FirebaseDatabase.getInstance().getReference().child("suggestion");
 
@@ -117,7 +121,7 @@ public class ChatActivity extends AppCompatActivity {
 			int amount = (int) (messageInputText.getText().toString().length()*0.4);
 			amount = Math.max(amount, 5);
 			amount = Math.min(amount, 30);
-			new ParticleSystem(ChatActivity.this, amount, R.drawable.particle_primary, 500)
+			new ParticleSystem(ChatActivity.this, amount, R.drawable.particle, 500)
 					.setSpeedRange(0.02f, 0.2f)
 					.setScaleRange(0.3f, 1f)
 					.setFadeOut(500)
@@ -157,7 +161,6 @@ public class ChatActivity extends AppCompatActivity {
 
 		initializeBottomDialog();
 		renderChat();
-		//startIntroduction();
 	}
 
 	private void sendMessage(String text) {
@@ -181,6 +184,8 @@ public class ChatActivity extends AppCompatActivity {
 	}
 
 	private void addMessageToList(Message message, String key) {
+		if(list.toArray().length+1 > messagesRenderLimit) list.remove(0);
+		minTimestamp = message.getS();
 		message._setKey(key);
 		message._setAnimate(true);
 		list.add(message);
@@ -193,20 +198,22 @@ public class ChatActivity extends AppCompatActivity {
 	}
 
 	private void renderChat() {
-		final long[] minTimestamp = {0};
-
-		FBD_messages.limitToLast(100).get().addOnCompleteListener(task -> {
+		FBD_messages.limitToLast(messagesRenderLimit).get().addOnCompleteListener(task -> {
 			if(task.isSuccessful()) {
 				Iterable<DataSnapshot> messagesDataSnapshotList = task.getResult().getChildren();
 				for(DataSnapshot snapshotItem : messagesDataSnapshotList) {
 					Message message = snapshotItem.getValue(Message.class);
 					if(message != null) {
-						minTimestamp[0] = message.getS();
+						minTimestamp = message.getS();
 						message._setKey(snapshotItem.getKey());
 						message._setAnimate(true);
 						list.add(message);
 					}
 				}
+
+				SharedPreferences preferences = getSharedPreferences("security", MODE_PRIVATE);
+				if(preferences.getString("muted_emails", "").contains(user.getEmail() + ";")) mute();
+				else unmute();
 
 				loadingContainer.setVisibility(View.GONE);
 				chatContainer.setVisibility(View.VISIBLE);
@@ -215,18 +222,12 @@ public class ChatActivity extends AppCompatActivity {
 
 				addMessageToList(new Message(Message.WELCOME_TYPE, user.getDisplayName()), "welcome-message");
 
-				messagesChildEventListener = new ChildEventListener() {
+				messagesChildEventListenerWithLimit = new ChildEventListener() {
 					@Override
 					public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String previousChildName) {
 						String key = dataSnapshot.getKey();
-						if(ignoredKeys.contains(key)) ignoredKeys.remove(key);
-						else {
-							Message newMessage = dataSnapshot.getValue(Message.class);
-							if(newMessage != null && minTimestamp[0] < newMessage.getS()) {
-								minTimestamp[0] = newMessage.getS();
-								addMessageToList(newMessage, key);
-							}
-						}
+						Message newMessage = dataSnapshot.getValue(Message.class);
+						if(newMessage != null && !ignoredKeys.contains(key) && minTimestamp < newMessage.getS()) addMessageToList(newMessage, key);
 					}
 
 					@Override
@@ -248,7 +249,8 @@ public class ChatActivity extends AppCompatActivity {
 					public void onCancelled(@NonNull DatabaseError error) {}
 				};
 
-				FBD_messages.limitToLast(100).addChildEventListener(messagesChildEventListener);
+				FBD_messagesWithLimit.addChildEventListener(messagesChildEventListenerWithLimit);
+				isMessagesChildEventListenerWithLimit = true;
 			} else {
 				loadingContainer.setVisibility(View.GONE);
 				errorContainer.setVisibility(View.VISIBLE);
@@ -259,9 +261,52 @@ public class ChatActivity extends AppCompatActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		FBD_messages.removeEventListener(messagesChildEventListener);
-		FBD_muted.removeEventListener(mutedValueEventListener);
-		FBD_suggestion.removeEventListener(suggestionValueEventListener);
+		if(messagesChildEventListenerWithLimit != null && isMessagesChildEventListenerWithLimit) {
+			FBD_messagesWithLimit.removeEventListener(messagesChildEventListenerWithLimit);
+			isMessagesChildEventListenerWithLimit = false;
+		}
+		if(mutedValueEventListener != null && isMutedValueEventListener) {
+			FBD_muted.removeEventListener(mutedValueEventListener);
+			isMutedValueEventListener = false;
+		}
+		if(suggestionValueEventListener != null && isSuggestionValueEventListener) {
+			FBD_suggestion.removeEventListener(suggestionValueEventListener);
+			isSuggestionValueEventListener = false;
+		}
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if(messagesChildEventListenerWithLimit != null && !isMessagesChildEventListenerWithLimit) {
+			FBD_messagesWithLimit.addChildEventListener(messagesChildEventListenerWithLimit);
+			isMessagesChildEventListenerWithLimit = true;
+		}
+		if(mutedValueEventListener != null && !isMutedValueEventListener) {
+			FBD_muted.addValueEventListener(mutedValueEventListener);
+			isMutedValueEventListener = true;
+		}
+		if(suggestionValueEventListener != null && !isSuggestionValueEventListener) {
+			FBD_suggestion.addValueEventListener(suggestionValueEventListener);
+			isSuggestionValueEventListener = true;
+		}
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		if(messagesChildEventListenerWithLimit != null && isMessagesChildEventListenerWithLimit) {
+			FBD_messagesWithLimit.removeEventListener(messagesChildEventListenerWithLimit);
+			isMessagesChildEventListenerWithLimit = false;
+		}
+		if(mutedValueEventListener != null && isMutedValueEventListener) {
+			FBD_muted.removeEventListener(mutedValueEventListener);
+			isMutedValueEventListener = false;
+		}
+		if(suggestionValueEventListener != null && isSuggestionValueEventListener) {
+			FBD_suggestion.removeEventListener(suggestionValueEventListener);
+			isSuggestionValueEventListener = false;
+		}
 	}
 
 	@Override
@@ -269,7 +314,7 @@ public class ChatActivity extends AppCompatActivity {
 		getMenuInflater().inflate(R.menu.toolbar_chat, menu);
 
 		MenuItem menuProfileItem = menu.findItem(R.id.menu_item_avatar);
-		View view = MenuItemCompat.getActionView(menuProfileItem);
+		@SuppressWarnings("deprecation") View view = MenuItemCompat.getActionView(menuProfileItem);
 
 		profileImage = view.findViewById(R.id.toolbar_menu_item_profile_image);
 		FrameLayout profileImageContainer = view.findViewById(R.id.toolbar_menu_item_profile_container);
@@ -300,11 +345,11 @@ public class ChatActivity extends AppCompatActivity {
 		if(userColor.equals("g")) {
 			goldenUsername.setVisibility(View.VISIBLE);
 			goldenUsername.setText(user.getDisplayName());
-			new GoldenAdapter(ChatActivity.this).start(goldenUsername, false);
+			new GoldenAdapter().applyFor(goldenUsername);
 		} else if(userColor.equals("e")) {
 			epicUsername.setVisibility(View.VISIBLE);
 			epicUsername.setText(user.getDisplayName());
-			new EpicAdapter(ChatActivity.this).start(epicUsername, false);
+			new EpicAdapter().applyFor(epicUsername);
 		} else {
 			username.setVisibility(View.VISIBLE);
 			username.setText(user.getDisplayName());
@@ -348,7 +393,7 @@ public class ChatActivity extends AppCompatActivity {
 			messageInputContainer.setVisibility(View.VISIBLE);
 			new Dialog(ChatActivity.this)
 					.setTitle("Привет, " + user.getDisplayName() + "! \uD83D\uDC4B")
-					.setText("Добро пожаловать в Skylire Live Chat! Здесь Вы в режиме реального времени можете общаться с другими пользователями.\n\nПри каждом входе в приложение Вам будут показаны 100 последних сообщений.")
+					.setText("Добро пожаловать в Skylire Live Chat! Здесь Вы в режиме реального времени можете общаться с другими пользователями.\n\nПри каждом входе в приложение Вам будут показаны " + messagesRenderLimit + " последних сообщений.")
 					.setOkButton("Продолжить", dialog -> {})
 					.setOnDismiss(() -> new MaterialTapTargetPrompt.Builder(ChatActivity.this)
 							.setPrimaryTextColour(getResources().getColor(R.color.white))
@@ -359,7 +404,7 @@ public class ChatActivity extends AppCompatActivity {
 							.setPrimaryTextTypeface(ResourcesCompat.getFont(ChatActivity.this, R.font.product_sans_bold))
 							.setTarget(messageSendImage)
 							.setPrimaryText("Отправить сообщение")
-							.setSecondaryText("Нажмите сюда, чтобы отпривить своё первое сообщение")
+							.setSecondaryText("Нажмите сюда, чтобы отправить своё первое сообщение")
 							.setPromptStateChangeListener((prompt, state) -> {
 								if(state == MaterialTapTargetPrompt.STATE_DISMISSED || state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
 									new MaterialTapTargetPrompt.Builder(ChatActivity.this)
@@ -395,7 +440,6 @@ public class ChatActivity extends AppCompatActivity {
 	private void startMuteListener() {
 		SharedPreferences preferences = getSharedPreferences("security", MODE_PRIVATE);
 		SharedPreferences.Editor editor = preferences.edit();
-		if(preferences.getBoolean("muted", false)) mute();
 
 		mutedValueEventListener = new ValueEventListener() {
 			@Override
@@ -411,9 +455,10 @@ public class ChatActivity extends AppCompatActivity {
 						break;
 					}
 				}
+				String mutedEmails = preferences.getString("muted_emails", "");
 				if(isMuted) {
-					if(!preferences.getBoolean("muted", false)) {
-						editor.putBoolean("muted", true);
+					if(!mutedEmails.contains(user.getEmail() + ";")) {
+						editor.putString("muted_emails", mutedEmails + user.getEmail() + ";");
 						editor.apply();
 						new Dialog(ChatActivity.this)
 								.setTitle("Ограничение")
@@ -422,8 +467,8 @@ public class ChatActivity extends AppCompatActivity {
 					}
 					mute();
 				} else {
-					if(preferences.getBoolean("muted", false)) {
-						editor.putBoolean("muted", false);
+					if(mutedEmails.contains(user.getEmail() + ";")) {
+						editor.putString("muted_emails", mutedEmails.replace(user.getEmail() + ";", ""));
 						editor.apply();
 						new Dialog(ChatActivity.this)
 								.setTitle("Ограничение снято")
@@ -439,6 +484,7 @@ public class ChatActivity extends AppCompatActivity {
 		};
 
 		FBD_muted.addValueEventListener(mutedValueEventListener);
+		isMutedValueEventListener = true;
 	}
 
 	private void mute() {
@@ -488,6 +534,7 @@ public class ChatActivity extends AppCompatActivity {
 		};
 
 		FBD_suggestion.addValueEventListener(suggestionValueEventListener);
+		isSuggestionValueEventListener = true;
 	}
 
 	private void updateUserColorAndIcon(String color, String icon) {

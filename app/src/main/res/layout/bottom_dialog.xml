@@ -14,7 +14,7 @@
 	<de.hdodenhof.circleimageview.CircleImageView
 		android:id="@+id/bottom_dialog_avatar"
 		android:layout_width="70dp"
-		android:layout_height="70dp"/>
+		android:layout_height="70dp" />
 
 	<LinearLayout
 		android:layout_marginTop="@dimen/margin_14"
@@ -27,21 +27,20 @@
 			android:visibility="gone"
 			android:background="@color/background_container"
 			android:id="@+id/bottom_dialog_username_icon"
-			android:contentDescription="@string/icon"
+			android:contentDescription="@string/icon_desc"
 			android:layout_width="26dp"
 			android:layout_height="26dp"
 			android:layout_marginEnd="@dimen/margin_8"
-			android:scaleType="centerCrop"/>
+			android:scaleType="centerCrop" />
 
 		<TextView
-			android:text="@string/text"
 			android:visibility="gone"
 			android:id="@+id/bottom_dialog_username"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:fontFamily="@font/game_bold"
 			android:textColor="@color/text"
-			android:textSize="@dimen/text_size"/>
+			android:textSize="@dimen/text_size" />
 
 		<com.romainpiel.shimmer.ShimmerTextView
 			style="@style/GoldenAdapter"
@@ -50,7 +49,7 @@
 			android:id="@+id/bottom_dialog_username_golden"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			app:reflectionColor="@color/gold_highlight"/>
+			app:reflectionColor="@color/gold_highlight" />
 
 		<com.romainpiel.shimmer.ShimmerTextView
 			style="@style/EpicAdapter"
@@ -59,7 +58,7 @@
 			android:id="@+id/bottom_dialog_username_epic"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			app:reflectionColor="@color/epic_highlight"/>
+			app:reflectionColor="@color/epic_highlight" />
 	</LinearLayout>
 
 	<TextView
@@ -68,7 +67,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:textSize="@dimen/text_size"
-		android:textColor="@color/text"/>
+		android:textColor="@color/text" />
 
 	<TextView
 		android:id="@+id/bottom_dialog_logout_button"
@@ -77,5 +76,5 @@
 		android:layout_height="wrap_content"
 		android:text="@string/logout"
 		android:layout_marginTop="@dimen/margin_48"
-		android:layout_marginBottom="@dimen/margin_48"/>
+		android:layout_marginBottom="@dimen/margin_48" />
 </LinearLayout>

@@ -45,7 +45,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:src="@drawable/logo"
-            android:contentDescription="@string/logo" />
+            android:contentDescription="@string/logo_desc" />
 
         <TextView
             android:text="@string/app_description"
@@ -76,21 +76,20 @@
                 android:visibility="gone"
                 android:background="@color/background"
                 android:id="@+id/icon"
-                android:contentDescription="@string/icon"
+                android:contentDescription="@string/icon_desc"
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:layout_marginEnd="@dimen/margin_8"
-                android:scaleType="centerCrop"/>
+                android:scaleType="centerCrop" />
 
             <TextView
-                android:text="@string/text"
                 android:visibility="gone"
                 android:id="@+id/username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/game_bold"
                 android:textColor="@color/text"
-                android:textSize="@dimen/text_size_username"/>
+                android:textSize="@dimen/text_size_username" />
 
             <com.romainpiel.shimmer.ShimmerTextView
                 style="@style/GoldenAdapter"
@@ -99,7 +98,7 @@
                 android:id="@+id/golden_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:reflectionColor="@color/gold_highlight"/>
+                app:reflectionColor="@color/gold_highlight" />
 
             <com.romainpiel.shimmer.ShimmerTextView
                 style="@style/EpicAdapter"
@@ -108,7 +107,7 @@
                 android:id="@+id/epic_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:reflectionColor="@color/epic_highlight"/>
+                app:reflectionColor="@color/epic_highlight" />
 
             <TextView
                 android:textSize="@dimen/text_size_username"
@@ -124,6 +123,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/text"
-            android:textSize="@dimen/text_size"/>
+            android:textSize="@dimen/text_size" />
     </LinearLayout>
 </LinearLayout>

@@ -13,6 +13,5 @@
 	<de.hdodenhof.circleimageview.CircleImageView
 		android:id="@+id/toolbar_menu_item_profile_image"
 		android:layout_width="35dp"
-		android:layout_height="35dp"/>
-
+		android:layout_height="35dp" />
 </FrameLayout>

@@ -10,12 +10,9 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
-
 import com.bumptech.glide.Glide;
-import com.langvest.skylire.ChatActivity;
 import com.langvest.skylire.R;
 import com.romainpiel.shimmer.ShimmerTextView;
-
 import java.util.Objects;
 
 public class Dialog {
@@ -108,7 +105,6 @@ public class Dialog {
 		TextView text = dialogView.findViewById(R.id.dialog_text);
 		TextView cancelButton = dialogView.findViewById(R.id.dialog_button_cancel);
 		TextView okButton = dialogView.findViewById(R.id.dialog_button_ok);
-
 		LinearLayout usernameContainer = dialogView.findViewById(R.id.dialog_username_container);
 
 		if(!this.username.equals("")) {
@@ -120,11 +116,11 @@ public class Dialog {
 			if(usernameColor.equals("g")) {
 				goldenUsername.setVisibility(View.VISIBLE);
 				goldenUsername.setText(this.username);
-				new GoldenAdapter(activity).start(goldenUsername, false);
+				new GoldenAdapter().applyFor(goldenUsername);
 			} else if(usernameColor.equals("e")) {
 				epicUsername.setVisibility(View.VISIBLE);
 				epicUsername.setText(this.username);
-				new EpicAdapter(activity).start(epicUsername, false);
+				new EpicAdapter().applyFor(epicUsername);
 			} else {
 				username.setVisibility(View.VISIBLE);
 				username.setText(this.username);

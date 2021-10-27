@@ -27,8 +27,7 @@
 			android:elevation="1dp"
 			android:layout_width="match_parent"
 			android:layout_height="65dp"
-			android:background="@drawable/shadow_chat"/>
-
+			android:background="@drawable/shadow_chat" />
 
 		<LinearLayout
 			android:id="@+id/loading_container"
@@ -41,9 +40,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				app:indicatorName="BallSpinFadeLoaderIndicator"
-				app:indicatorColor="@color/text"
-				/>
-
+				app:indicatorColor="@color/text" />
 		</LinearLayout>
 
 		<LinearLayout
@@ -71,7 +68,6 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text="@string/retry" />
-
 		</LinearLayout>
 
 		<ListView
@@ -126,6 +122,6 @@
 			android:id="@+id/message_send"
 			android:layout_width="52dp"
 			android:layout_height="50dp"
-			android:contentDescription="@string/send" />
+			android:contentDescription="@string/send_desc" />
 	</LinearLayout>
 </LinearLayout>

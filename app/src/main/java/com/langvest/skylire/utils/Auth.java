@@ -10,7 +10,7 @@ import com.langvest.skylire.R;
 public class Auth {
 
 	private static Auth auth;
-	private static FirebaseAuth firebaseAuth;
+	private final FirebaseAuth firebaseAuth;
 
 	private Auth() {
 		firebaseAuth = FirebaseAuth.getInstance();
@@ -23,7 +23,7 @@ public class Auth {
 
 	public GoogleSignInClient getGoogleSignInClient(Activity activity) {
 		GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-				.requestIdToken(activity.getString(R.string.default_web_client_id_custom))
+				.requestIdToken(activity.getString(R.string.web_client_id))
 				.requestEmail()
 				.build();
 		return GoogleSignIn.getClient(activity, gso);

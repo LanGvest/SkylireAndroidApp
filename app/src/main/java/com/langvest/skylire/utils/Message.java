@@ -13,7 +13,8 @@ public class Message {
     private long s = 0; // timestamp
     private String _key = "";
     private boolean _animate = true;
-    private int _type = 0;
+    private int _type = DEFAULT_TYPE;
+    public static final int DEFAULT_TYPE = 0;
     public static final int WELCOME_TYPE = 1;
 
     public Message() {}
@@ -34,7 +35,7 @@ public class Message {
     }
 
     private String validateText(String text) {
-        String result = text.trim().replaceAll("\n", " ").replaceAll(" +", " ");
+        String result = text.trim().replaceAll("\\n", " ").replaceAll(" +", " ");
         if(result.length() > 300) result = result.substring(0, 300).trim() + "...";
         return result;
     }
@@ -84,8 +85,9 @@ public class Message {
     }
 
     public String _getMetaWithTime() {
-        if(_type == 0) return m + "-" + c + "-" + DateFormat.format("yyyy-M-d-H-m", s) + "-" + i;
-        return String.valueOf(_type);
+        if(_type != DEFAULT_TYPE) return String.valueOf(_type);
+        return m + "-" + c + "-" + DateFormat.format("yyyy-M-d-H-m", s) + "-" + i;
+
     }
 
     public String _getDateMeta() {

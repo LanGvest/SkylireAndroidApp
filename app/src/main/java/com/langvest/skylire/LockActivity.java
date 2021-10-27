@@ -14,10 +14,4 @@ public class LockActivity extends AppCompatActivity {
 
 		AppMode.getInstance(LockActivity.this, true).startListenForModeCode();
 	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-
-	}
 }

@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import com.bumptech.glide.Glide;
 import com.langvest.skylire.R;
 import com.romainpiel.shimmer.ShimmerTextView;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -26,89 +27,89 @@ public class MessageAdapter extends ArrayAdapter<Message> {
     int listLayout;
     ArrayList<Message> list;
     Activity activity;
-    private static final String p = "png";
-    private static final String g = "gif";
+    private static final String PNG = "png";
+    private static final String GIF = "gif";
     public static final String[] iconFormats = {
-            p,
-            p,
-            g,
-            p,
-            g,
-            p,
-            p,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            p,
-            g,
-            g,
-            g,
-            g,
-            g,
-            p,
-            g,
-            g,
-            p,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            p,
-            g,
-            p,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            g,
-            p,
-            p,
-            p,
-            p,
-            p
+            PNG,
+            PNG,
+            GIF,
+            PNG,
+            GIF,
+            PNG,
+            PNG,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            PNG,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            PNG,
+            GIF,
+            GIF,
+            PNG,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            PNG,
+            GIF,
+            PNG,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            GIF,
+            PNG,
+            PNG,
+            PNG,
+            PNG,
+            PNG
     };
 
     public MessageAdapter(Activity activity, int listLayout, int field, ArrayList<Message> list) {
@@ -148,7 +149,6 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -182,7 +182,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         if(message._getType() == Message.WELCOME_TYPE) {
             mainContainer.setVisibility(View.GONE);
             welcomeContainer.setVisibility(View.VISIBLE);
-            welcome.setText(message.getN() + ", добро пожаловать в Skylire Live Chat!");
+            welcome.setText(MessageFormat.format("{0}, {1}", message.getN(), activity.getResources().getString(R.string.welcome_message)));
         } else {
             if(position == 0) mainContainer.setPadding(mainContainer.getPaddingLeft(), 0, mainContainer.getPaddingRight(), mainContainer.getPaddingBottom());
 
@@ -194,11 +194,11 @@ public class MessageAdapter extends ArrayAdapter<Message> {
                 if(message.getC().equals("g")) {
                     goldenUsername.setVisibility(View.VISIBLE);
                     goldenUsername.setText(message.getN());
-                    new GoldenAdapter(activity).start(goldenUsername, false);
+                    new GoldenAdapter().applyFor(goldenUsername);
                 } else if(message.getC().equals("e")) {
                     epicUsername.setVisibility(View.VISIBLE);
                     epicUsername.setText(message.getN());
-                    new EpicAdapter(activity).start(epicUsername, false);
+                    new EpicAdapter().applyFor(epicUsername);
                 } else {
                     username.setVisibility(View.VISIBLE);
                     username.setText(message.getN());

@@ -1,6 +1,5 @@
 package com.langvest.skylire.utils;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,13 +15,13 @@ import com.langvest.skylire.R;
 
 public class AppMode {
 
-	@SuppressLint("StaticFieldLeak")
 	private static AppMode appMode;
 	private final DatabaseReference FBD_mode;
-	private Activity activity;
 	private boolean isLockActivity;
 	private SharedPreferences preferences;
 	private SharedPreferences.Editor editor;
+	private OpenScreenAction openLockScreen;
+	private OpenScreenAction openMainScreen;
 
 	private AppMode() {
 		FBD_mode = FirebaseDatabase.getInstance().getReference().child("mode");
@@ -36,9 +35,9 @@ public class AppMode {
 				editor.putInt("mode", modeCode);
 				editor.apply();
 				if (isLockActivity) {
-					if (modeCode == 0) openMainScreen();
+					if (modeCode == 0) openMainScreen.execute();
 				} else {
-					if (modeCode != 0) openLockScreen();
+					if (modeCode != 0) openLockScreen.execute();
 				}
 			}
 
@@ -49,8 +48,12 @@ public class AppMode {
 		FBD_mode.addValueEventListener(eventListener);
 	}
 
-	private void setActivity(Activity activity) {
-		this.activity = activity;
+	private void setOpenLockScreen(OpenScreenAction action) {
+		openLockScreen = action;
+	}
+
+	private void setOpenMainScreen(OpenScreenAction action) {
+		openMainScreen = action;
 	}
 
 	private void setIsLockActivity(boolean isLockActivity) {
@@ -67,27 +70,24 @@ public class AppMode {
 
 	public static synchronized AppMode getInstance(Activity activity, boolean isLockActivity) {
 		if(appMode == null) appMode = new AppMode();
-		appMode.setActivity(activity);
+		appMode.setOpenLockScreen(() -> {
+			activity.startActivity(new Intent(activity, LockActivity.class));
+			activity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+			activity.finish();
+		});
+		appMode.setOpenMainScreen(() -> {
+			activity.startActivity(new Intent(activity, MainActivity.class));
+			activity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+			activity.finish();
+		});
 		appMode.setIsLockActivity(isLockActivity);
 		appMode.setPreferences(activity);
 		appMode.updateEditor();
 		return appMode;
 	}
 
-	private void openLockScreen() {
-		activity.startActivity(new Intent(activity, LockActivity.class));
-		activity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-		activity.finish();
-	}
-
-	private void openMainScreen() {
-		activity.startActivity(new Intent(activity, MainActivity.class));
-		activity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-		activity.finish();
-	}
-
 	public void startListenForModeCode() {
-		if(!isLockActivity && preferences.getInt("mode", 0) != 0) openLockScreen();
+		if(!isLockActivity && preferences.getInt("mode", 0) != 0) openLockScreen.execute();
 	}
 
 	public void onceListenForModeCode(OnNormalModeCode normalModeCode) {
@@ -100,7 +100,7 @@ public class AppMode {
 			editor.putInt("mode", modeCode);
 			editor.apply();
 			if(!isLockActivity) {
-				if(modeCode != 0) openLockScreen();
+				if(modeCode != 0) openLockScreen.execute();
 				else normalModeCode.execute();
 			}
 		});
@@ -108,6 +108,11 @@ public class AppMode {
 
 	@FunctionalInterface
 	public interface OnNormalModeCode {
+		void execute();
+	}
+
+	@FunctionalInterface
+	public interface OpenScreenAction {
 		void execute();
 	}
 }

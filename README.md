@@ -1,8 +1,8 @@
 # Skylire: Android app
 
-``Skyline`` is a platform for real-time streaming messaging.
+``Skylire`` is a platform for real-time streaming messaging.
 
-You can download the latest version of the android app (Skylire.apk 4.24MB) from [this link](https://drive.google.com/file/d/1lrvuad1sHmThbdkKRRPmp8_V5PqaSf3g/view?usp=sharing "Download app").
+You can download the latest version of the android app (Skylire.apk 4.24MB) from [this link](https://skylire.langvest.by/app "Download app").
 You can also visit the web version of the application at [this link](https://skylire.langvest.by "Visit site").
 
 ## Dependencies used
