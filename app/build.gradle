@@ -18,6 +18,7 @@ android {
             keyPassword 'L112G228'
         }
     }
+
     compileSdk 31
 
     defaultConfig {
@@ -26,6 +27,8 @@ android {
         targetSdk 31
         versionCode 1
         versionName "1.0"
+
+        archivesBaseName = "Skylire"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -40,6 +43,7 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8

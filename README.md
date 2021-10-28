@@ -2,7 +2,7 @@
 
 ``Skylire`` is a platform for real-time streaming messaging.
 
-You can download the latest version of the android app (4.99 MB) from [this link](https://skylire.langvest.by/app "Download app").
+You can download the latest version of the android app (4.23 MB) from [this link](https://skylire.langvest.by/app "Download app").
 You can also visit the web implementation of the chat at [this link](https://skylire.langvest.by "Visit site").
 
 ## Dependencies used
