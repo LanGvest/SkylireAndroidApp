@@ -1,23 +1,25 @@
-# Skylire: Android App
+# Skylire Android App
 
-``Skylire`` is an example platform for real-time streaming messaging.
+`Skylire` is an example platform to demonstrate how real-time streaming messaging works.
 
-# Download
+## Download
 
 You can download the latest version of the android app (4.23 MB) from [this link](https://skylire.langvest.by/app "Download app").
 
-# Demo
+## Demo
 
-You can also visit the web-implementation of the chat at [this link](https://skylire.langvest.by "Visit site").
+You can also check out the web widget of the chat at [this link](https://skylire.langvest.by "Visit site").
+
+> This web widget can be embedded into any video streaming (e.g. YouTube or Twitch) using OBS or any other program that supports embedding web widgets by URL.
 
 ## Dependencies used
 
-1. Firebase Auth ``com.google.firebase:firebase-auth:21.0.1``
-2. Google Play Services Auth ``com.google.android.gms:play-services-auth:19.2.0``
-3. Firebase Realtime Database ``com.google.firebase:firebase-database:20.0.2``
-4. Particles ``com.plattysoft.leonids:LeonidsLib:1.3.2``
-5. Shimmer TextView Effect ``com.romainpiel.shimmer:library:1.4.0@aar``
-6. ImageView by URL ``com.github.bumptech.glide:glide:4.12.0``
-7. TapTargetView ``uk.co.samuelwall:material-tap-target-prompt:2.0.1``
-8. Circle ImageView ``de.hdodenhof:circleimageview:3.0.0``
-9. LoadingView ``com.wang.avi:library:2.1.3``
+1. Firebase Auth `com.google.firebase:firebase-auth:21.0.1`
+2. Google Play Services Auth `com.google.android.gms:play-services-auth:19.2.0`
+3. Firebase Realtime Database `com.google.firebase:firebase-database:20.0.2`
+4. Particles `com.plattysoft.leonids:LeonidsLib:1.3.2`
+5. Shimmer TextView Effect `com.romainpiel.shimmer:library:1.4.0@aar`
+6. ImageView by URL `com.github.bumptech.glide:glide:4.12.0`
+7. TapTargetView `uk.co.samuelwall:material-tap-target-prompt:2.0.1`
+8. Circle ImageView `de.hdodenhof:circleimageview:3.0.0`
+9. LoadingView `com.wang.avi:library:2.1.3`
